@@ -16,17 +16,27 @@ function SignUp({navigation}) {
         {email: Email, password: Pass},
         {headers: {'x-gigawatts': '1.21'}},
       )
-      .then(response =>
-        response.data == 'posted successfully'
-          ? [
-              navigation.navigate('Signin'),
-              ToastAndroid.showWithGravity(
-                'Account Created  Successfully',
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-              ),
-            ]
-          : null,
+      .then(
+        response => {
+          if (response.data == 'posted successfully') {
+            navigation.navigate('Signin');
+            ToastAndroid.showWithGravity(
+              'Account Created  Successfully',
+              ToastAndroid.LONG,
+              ToastAndroid.BOTTOM,
+            );
+          }
+        },
+        // response.data == 'posted successfully'
+        //   ? [
+        //       navigation.navigate('Signin'),
+        //       ToastAndroid.showWithGravity(
+        //         'Account Created  Successfully',
+        //         ToastAndroid.LONG,
+        //         ToastAndroid.BOTTOM,
+        //       ),
+        //     ]
+        //   : null,
       )
       .then(data => console.log(data));
     // api

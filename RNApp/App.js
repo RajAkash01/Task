@@ -12,14 +12,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Stacknav, Stacknav2} from './Navigations/StackNav';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 /* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
  * LTI update could not be added via codemod */
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
-  const [Logged, setLogged] = useState();
+  const [Logged, setLogged] = useState(false);
   useEffect(() => {
     RetrieveData();
   }, []);
@@ -27,7 +27,7 @@ const App = () => {
   const RetrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('Login');
-      if (value == true) {
+      if (value == 'true') {
         // We have data!!
         setLogged(true);
         console.log(true);
@@ -39,7 +39,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <PaperProvider>
-        {Logged == true ? <Stacknav /> : <Stacknav2 />}
+        {Logged == true ? <Stacknav2 /> : <Stacknav />}
       </PaperProvider>
     </NavigationContainer>
   );

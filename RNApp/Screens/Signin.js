@@ -3,13 +3,19 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Text, ToastAndroid} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {Button, TextInput} from 'react-native-paper';
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 function Signin({navigation}) {
   const [Email, setEmail] = useState('');
   const [Pass, setPass] = useState('');
   const Storedata = async () => {
     try {
-      await AsyncStorage.setItem('Login', true);
+      await AsyncStorage.setItem('Login', 'true');
+      ToastAndroid.showWithGravity(
+        'Saved Data Successfully',
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        console.log('Saved data'),
+      );
     } catch (error) {
       // Error saving data
     }
@@ -25,23 +31,17 @@ function Signin({navigation}) {
         {email: Email, password: Pass},
         {headers: {'x-gigawatts': '1.21'}},
       )
-      .then(response =>
-        response.data == 'Logged in successfully'
-          ? [
-              navigation.replace('Home'),
-              ToastAndroid.showWithGravity(
-                'Logged in Successfully',
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-                Storedata(),
-              ),
-            ]
-          : null,
-      );
-    // api
-    //   .get('/')
-    //   .then(response => response.data[0])
-    //   .then(console.log);
+      .then(response => {
+        if (response.data == 'Logged in successfully') {
+          navigation.replace('Home');
+          ToastAndroid.showWithGravity(
+            'Logged in Successfully',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+          );
+          Storedata();
+        }
+      });
   };
   console.log(Email, Pass);
   return (
